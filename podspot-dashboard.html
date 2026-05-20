@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Podspot">
+<title>Podspot Command</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0d0b;
+  --bg-card: #1a1815;
+  --bg-elev: #221f1b;
+  --ink: #f4ede1;
+  --ink-dim: #a89e8c;
+  --ink-faint: #6b6357;
+  --accent: #d97a3c;
+  --accent-warm: #e8a87c;
+  --green: #7ba05b;
+  --red: #c44a3a;
+  --line: #2d2925;
+  --line-soft: #1f1c19;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'Fraunces', Georgia, serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background-image:
+    radial-gradient(ellipse at top right, rgba(217, 122, 60, 0.08), transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(123, 160, 91, 0.05), transparent 50%);
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 100px;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 32px;
+}
+
+.brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brand .dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+  transform: translateY(-2px);
+}
+
+.brand-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-top: 6px;
+}
+
+.header-right {
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.header-right .week {
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab {
+  background: none;
+  border: none;
+  color: var(--ink-faint);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 14px 18px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tab:hover { color: var(--ink-dim); }
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* MISSION / NORTH STAR */
+.mission {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-elev));
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 32px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mission::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent);
+}
+
+.mission-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.mission-text {
+  font-size: 24px;
+  line-height: 1.35;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  max-width: 800px;
+}
+
+.mission-text em {
+  font-style: italic;
+  color: var(--accent-warm);
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.kr-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 20px;
+  transition: border-color 0.2s ease;
+}
+
+.kr-card:hover { border-color: var(--line); }
+
+.kr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.kr-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.kr-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.kr-status.on { background: rgba(123, 160, 91, 0.15); color: var(--green); }
+.kr-status.behind { background: rgba(196, 74, 58, 0.15); color: var(--red); }
+.kr-status.coming { background: rgba(168, 158, 140, 0.1); color: var(--ink-dim); }
+
+.kr-title {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.kr-progress {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.kr-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.kr-target {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--ink-faint);
+}
+
+.kr-bar {
+  height: 4px;
+  background: var(--bg-elev);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.kr-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.kr-input {
+  width: 100%;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+.kr-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* WEEK CARD */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.metric {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.metric-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.metric-target {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.weekly-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.weekly-input input {
+  flex: 1;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  padding: 6px 8px;
+  border-radius: 2px;
+}
+
+.weekly-input input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* TIMELINE */
+.timeline {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.timeline-track {
+  position: relative;
+  height: 60px;
+  margin: 24px 0 16px;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--line);
+}
+
+.timeline-progress {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+}
+
+.timeline-marker {
+  position: absolute;
+  top: 22px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--line);
+  transform: translateX(-50%);
+}
+
+.timeline-marker.done {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.timeline-marker.now {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(217, 122, 60, 0.2);
+}
+
+.timeline-label {
+  position: absolute;
+  top: 48px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.timeline-marker.now + .timeline-label { color: var(--accent); }
+
+/* PHASES */
+.phase {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.phase.current {
+  border-color: var(--accent);
+}
+
+.phase.current::before {
+  content: 'CURRENT';
+  position: absolute;
+  top: -8px;
+  right: 16px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+.phase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.phase-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.phase-dates {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.phase-focus {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: var(--accent-warm);
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.phase-krs {
+  list-style: none;
+  padding: 0;
+}
+
+.phase-krs li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line-soft);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.phase-krs li:first-child { border-top: none; }
+
+.kr-bullet {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  padding-top: 4px;
+  min-width: 32px;
+}
+
+/* TIME ALLOCATION */
+.time-allocation {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.section-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 20px;
+}
+
+.time-bar {
+  display: flex;
+  height: 36px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.time-slice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--bg);
+}
+
+.time-slice.sales { background: var(--accent); flex: 5; }
+.time-slice.supply { background: var(--accent-warm); flex: 2; }
+.time-slice.ops { background: var(--green); flex: 2; }
+.time-slice.marketing { background: #c8a96a; flex: 1; }
+
+.time-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* PRINCIPLES */
+.principle {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  border-radius: 0 4px 4px 0;
+}
+
+.principle-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+
+.principle-text {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* NOTES */
+.notes-area {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  padding: 16px;
+  border-radius: 4px;
+  min-height: 200px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.notes-area:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.notes-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+  text-align: right;
+}
+
+/* HISTORY */
+.history-week {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.history-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.history-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+
+.history-stats span strong {
+  color: var(--ink);
+  margin-right: 4px;
+}
+
+/* BUTTONS */
+.btn {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn:hover { opacity: 0.85; }
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink-dim);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* SECTION HEADER */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.section-header h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.section-header p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* Save toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 4px;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .container { padding: 16px 14px 100px; }
+  .brand { font-size: 22px; }
+  .mission { padding: 24px 20px; }
+  .mission-text { font-size: 18px; }
+  .section-header h2 { font-size: 22px; }
+  .tab { padding: 12px 14px; font-size: 10px; }
+  .timeline-label { font-size: 8px; }
+  .phase { padding: 20px 16px; }
+  .phase-title { font-size: 19px; }
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div>
+    <div class="brand"><span class="dot"></span>PODSPOT</div>
+    <div class="brand-sub">Command Center · 2026</div>
+  </div>
+  <div class="header-right">
+    <div class="week mono" id="week-num">Week 21</div>
+    <div id="today-date">May 20, 2026</div>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-tab="north-star">North Star</button>
+  <button class="tab" data-tab="this-week">This Week</button>
+  <button class="tab" data-tab="quarter">Current Phase</button>
+  <button class="tab" data-tab="plan">Full Plan</button>
+  <button class="tab" data-tab="history">History</button>
+  <button class="tab" data-tab="notes">Notes</button>
+</div>
+
+<!-- NORTH STAR -->
+<section class="section active" id="north-star">
+
+  <div class="mission">
+    <div class="mission-label">The Mission · 2026</div>
+    <div class="mission-text">
+      Prove Podspot is a real business. Validate the model with <em>paying advertisers</em>, <em>repeat buyers</em>, and a <em>repeatable sales motion</em> — so 2027 can be the year you scale.
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Annual Key Results</h2>
+    <p>Through Dec 31, 2026</p>
+  </div>
+
+  <div class="grid" id="annual-krs"></div>
+
+  <div class="section-header" style="margin-top:40px">
+    <h2>Operating Principles</h2>
+    <p>The rules of the game</p>
+  </div>
+
+  <div class="principle">
+    <div class="principle-num">01</div>
+    <div class="principle-text">10 hours per week is the <strong>cap</strong>, not the floor. Creep past it and you steal from other ventures or your life.</div>
+  </div>
+  <div class="principle">
+    <div class="principle-num">02</div>
+    <div class="principle-text">Lead with outbound through Q3. Layer inbound content only once you have case studies worth telling.</div>
+  </div>
+  <div class="principle">
+    <div class="principle-num">03</div>
+    <div class="principle-text">Calendar discipline beats motivation. Book the time before the week starts.</div>
+  </div>
+  <div class="principle">
+    <div class="principle-num">04</div>
+    <div class="principle-text">A bad week is fine. Aim for momentum across the year, not perfection in any week.</div>
+  </div>
+  <div class="principle">
+    <div class="principle-num">05</div>
+    <div class="principle-text">Killing Podspot in December is a <strong>valid outcome</strong> if the data says so. The point is to know, not to keep guessing.</div>
+  </div>
+
+</section>
+
+<!-- THIS WEEK -->
+<section class="section" id="this-week">
+  <div class="section-header">
+    <h2>This Week's Pulse</h2>
+    <p>Log every Friday · 5 minutes</p>
+  </div>
+
+  <div class="week-grid">
+    <div class="metric">
+      <div class="metric-label">Focused Hours</div>
+      <div class="metric-value" id="m-hours">—</div>
+      <div class="metric-target">Target: 10</div>
+      <div class="weekly-input">
+        <input type="number" id="in-hours" placeholder="hrs" step="0.5">
+      </div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Prospects Pitched</div>
+      <div class="metric-value" id="m-pitched">—</div>
+      <div class="metric-target">Target: 2–3</div>
+      <div class="weekly-input">
+        <input type="number" id="in-pitched" placeholder="count">
+      </div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">New Advertisers</div>
+      <div class="metric-value" id="m-closed">—</div>
+      <div class="metric-target">Target: ~1/month</div>
+      <div class="weekly-input">
+        <input type="number" id="in-closed" placeholder="count">
+      </div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Revenue Booked ($)</div>
+      <div class="metric-value" id="m-revenue">—</div>
+      <div class="metric-target">All deals this week</div>
+      <div class="weekly-input">
+        <input type="number" id="in-revenue" placeholder="USD">
+      </div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Active Shows</div>
+      <div class="metric-value" id="m-shows">—</div>
+      <div class="metric-target">Year-end target: 25</div>
+      <div class="weekly-input">
+        <input type="number" id="in-shows" placeholder="count">
+      </div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Content Posted</div>
+      <div class="metric-value" id="m-content">—</div>
+      <div class="metric-target">Q3+: 1/week</div>
+      <div class="weekly-input">
+        <input type="number" id="in-content" placeholder="count">
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn" onclick="logWeek()">Log This Week</button>
+    <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+  </div>
+
+  <div style="margin-top:32px">
+    <div class="section-header">
+      <h2>Weekly Reflection</h2>
+      <p>Three questions · ninety seconds</p>
+    </div>
+    <textarea class="notes-area" id="week-notes" placeholder="What worked this week?
+
+What didn't?
+
+What's the one thing for next week?"></textarea>
+  </div>
+</section>
+
+<!-- CURRENT PHASE -->
+<section class="section" id="quarter">
+  <div class="section-header">
+    <h2>Where You Are</h2>
+    <p>The compressed 2026 timeline</p>
+  </div>
+
+  <div class="timeline">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-faint)">2026 Timeline</span>
+      <span class="mono" style="font-size:10px;color:var(--accent)">YOU ARE HERE</span>
+    </div>
+    <div class="timeline-track">
+      <div class="timeline-line"></div>
+      <div class="timeline-progress" style="width: 38%"></div>
+      <div class="timeline-marker done" style="left: 0%"></div>
+      <div class="timeline-label" style="left: 0%">Jan 1</div>
+      <div class="timeline-marker now" style="left: 38%"></div>
+      <div class="timeline-label" style="left: 38%">May 20</div>
+      <div class="timeline-marker" style="left: 50%"></div>
+      <div class="timeline-label" style="left: 50%">Jul 1</div>
+      <div class="timeline-marker" style="left: 75%"></div>
+      <div class="timeline-label" style="left: 75%">Oct 1</div>
+      <div class="timeline-marker" style="left: 100%"></div>
+      <div class="timeline-label" style="left: 100%">Dec 31</div>
+    </div>
+  </div>
+
+  <div class="phase current">
+    <div class="phase-header">
+      <div class="phase-title">Phase 1: Foundation Sprint</div>
+      <div class="phase-dates">May 20 → Jun 30 · 6 wks</div>
+    </div>
+    <div class="phase-focus">Stop guessing, start measuring. Get sellable.</div>
+    <ul class="phase-krs">
+      <li><span class="kr-bullet">KR1</span>Build a one-page media kit with downloads, demographics, and pricing per show</li>
+      <li><span class="kr-bullet">KR2</span>Document baseline metrics for all 15 current shows (downloads, fill rate, CPM)</li>
+      <li><span class="kr-bullet">KR3</span>Add 1 new show to inventory (→ 16 total)</li>
+      <li><span class="kr-bullet">KR4</span>Pitch 8 advertiser prospects · close 1 deal · book $1,500</li>
+      <li><span class="kr-bullet">KR5</span>Hit 10 focused hrs/week in 5 of 6 weeks</li>
+    </ul>
+  </div>
+
+  <div class="time-allocation" style="margin-top:24px">
+    <div class="section-title">How Your 10 Weekly Hours Break Down</div>
+    <div class="section-sub">The Budget</div>
+    <div class="time-bar">
+      <div class="time-slice sales">5h SALES</div>
+      <div class="time-slice supply">2h SHOWS</div>
+      <div class="time-slice ops">2h OPS</div>
+      <div class="time-slice marketing">1h MKTG</div>
+    </div>
+    <div class="time-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>Sales &amp; advertiser outreach</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--accent-warm)"></span>Show acquisition &amp; relationships</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Ops, ad delivery, admin</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#c8a96a"></span>Marketing &amp; content</div>
+    </div>
+  </div>
+</section>
+
+<!-- FULL PLAN -->
+<section class="section" id="plan">
+  <div class="section-header">
+    <h2>The Full Run</h2>
+    <p>May 2026 → Q1 2027</p>
+  </div>
+
+  <div class="phase current">
+    <div class="phase-header">
+      <div class="phase-title">Phase 1 · Foundation Sprint</div>
+      <div class="phase-dates">May 20 – Jun 30</div>
+    </div>
+    <div class="phase-focus">Stop guessing, start measuring. Get sellable.</div>
+    <ul class="phase-krs">
+      <li><span class="kr-bullet">KR1</span>Build a one-page media kit</li>
+      <li><span class="kr-bullet">KR2</span>Document baseline metrics for all 15 shows</li>
+      <li><span class="kr-bullet">KR3</span>Add 1 new show (→ 16 total)</li>
+      <li><span class="kr-bullet">KR4</span>Pitch 8 prospects · close 1 · book $1,500</li>
+      <li><span class="kr-bullet">KR5</span>Hit 10 hrs/week, 5 of 6 weeks</li>
+    </ul>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-title">Phase 2 · Sell Hard</div>
+      <div class="phase-dates">Jul 1 – Sep 30 · Q3</div>
+    </div>
+    <div class="phase-focus">Outbound sales, hard. The revenue quarter.</div>
+    <ul class="phase-krs">
+      <li><span class="kr-bullet">KR1</span>Pitch 25 prospects (~2/week)</li>
+      <li><span class="kr-bullet">KR2</span>Close 4 advertisers · book $8K</li>
+      <li><span class="kr-bullet">KR3</span>Add 3 shows (→ 19 total)</li>
+      <li><span class="kr-bullet">KR4</span>Send post-campaign reports within 14 days, 100% of the time</li>
+      <li><span class="kr-bullet">KR5</span>Document the sales process · templates · objection handling</li>
+    </ul>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-title">Phase 3 · Prove &amp; Amplify</div>
+      <div class="phase-dates">Oct 1 – Dec 15 · Q4</div>
+    </div>
+    <div class="phase-focus">Convert first buyers into repeat buyers. Start the marketing engine.</div>
+    <ul class="phase-krs">
+      <li><span class="kr-bullet">KR1</span>Close $7K (mix of new + repeat)</li>
+      <li><span class="kr-bullet">KR2</span>Convert 2 buyers into repeat advertisers</li>
+      <li><span class="kr-bullet">KR3</span>Publish 2 case studies (1 written, 1 audio/video)</li>
+      <li><span class="kr-bullet">KR4</span>Launch content cadence: 1 LinkedIn/wk + monthly newsletter</li>
+      <li><span class="kr-bullet">KR5</span>Add 3 shows (→ 22 total)</li>
+    </ul>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-title">Phase 4 · Decide &amp; Reset</div>
+      <div class="phase-dates">Dec 15 – Jan 31, 2027</div>
+    </div>
+    <div class="phase-focus">Hit annual targets. Decide what 2027 looks like.</div>
+    <ul class="phase-krs">
+      <li><span class="kr-bullet">KR1</span>Hit annual revenue target ($16K min · $20K stretch)</li>
+      <li><span class="kr-bullet">KR2</span>Reach 22+ active shows</li>
+      <li><span class="kr-bullet">KR3</span><strong>Write the honest answer:</strong> double down, hold steady, or sunset Podspot?</li>
+      <li><span class="kr-bullet">KR4</span>If doubling down — identify first hire/contractor (VA, sales help)</li>
+      <li><span class="kr-bullet">KR5</span>Set 2027 OKRs with real baseline data</li>
+    </ul>
+  </div>
+
+  <div style="background:var(--bg-card);border:1px dashed var(--line);border-radius:4px;padding:20px;margin-top:24px;font-size:14px;line-height:1.6;color:var(--ink-dim)">
+    <strong style="color:var(--ink)">A note on the revised revenue target.</strong> Annual moved from $25K → ~$16–20K because seven months of focused work is less than twelve. If you blow past it, raise the target for 2027 — don't compress more into 2026.
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section class="section" id="history">
+  <div class="section-header">
+    <h2>Past Weeks</h2>
+    <p>What you've actually done</p>
+  </div>
+
+  <div id="history-list"></div>
+
+  <div class="btn-row" style="margin-top:24px">
+    <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
+    <button class="btn btn-secondary" onclick="confirmReset()">Reset All Data</button>
+  </div>
+</section>
+
+<!-- NOTES -->
+<section class="section" id="notes">
+  <div class="section-header">
+    <h2>Long-Form Notes</h2>
+    <p>Ideas · prospects · reflections</p>
+  </div>
+  <textarea class="notes-area" id="long-notes" style="min-height:400px" placeholder="A scratch pad for ideas, prospect lists, things to remember, lessons learned…"></textarea>
+  <div class="notes-meta" id="notes-saved">Saved automatically</div>
+</section>
+
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+// ============== STATE ==============
+const STORAGE_KEY = 'podspot_dashboard_v1';
+
+const defaultState = {
+  // Annual KR running totals
+  annual: {
+    revenue: { current: 0, target: 16000, label: 'Revenue Booked', prefix: '$' },
+    shows: { current: 15, target: 22, label: 'Active Shows', prefix: '' },
+    advertisers: { current: 0, target: 8, label: 'Paying Advertisers', prefix: '' },
+    repeats: { current: 0, target: 2, label: 'Repeat Buyers', prefix: '' },
+    cases: { current: 0, target: 2, label: 'Case Studies', prefix: '' }
+  },
+  weekHistory: [],
+  longNotes: '',
+  weekNotes: ''
+};
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return Object.assign({}, defaultState, JSON.parse(raw));
+  } catch (e) { console.warn(e); }
+  return JSON.parse(JSON.stringify(defaultState));
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) { console.warn(e); }
+}
+
+function showToast(msg = 'Saved') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// ============== TABS ==============
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ============== ANNUAL KRS ==============
+function renderAnnualKRs() {
+  const container = document.getElementById('annual-krs');
+  const krs = state.annual;
+  container.innerHTML = '';
+
+  Object.entries(krs).forEach(([key, kr]) => {
+    const pct = Math.min(100, (kr.current / kr.target) * 100);
+    const status = pct >= 30 ? 'on' : pct > 0 ? 'behind' : 'coming';
+    const statusLabel = pct >= 30 ? 'On Track' : pct > 0 ? 'Behind' : 'Not Started';
+
+    const card = document.createElement('div');
+    card.className = 'kr-card';
+    card.innerHTML = `
+      <div class="kr-header">
+        <div class="kr-label">${kr.label}</div>
+        <div class="kr-status ${status}">${statusLabel}</div>
+      </div>
+      <div class="kr-progress">
+        <div class="kr-value">${kr.prefix}${formatNum(kr.current)}</div>
+        <div class="kr-target">/ ${kr.prefix}${formatNum(kr.target)}</div>
+      </div>
+      <div class="kr-bar"><div class="kr-bar-fill" style="width:${pct}%"></div></div>
+      <input type="number" class="kr-input" data-key="${key}" value="${kr.current}" step="any">
+    `;
+    container.appendChild(card);
+  });
+
+  container.querySelectorAll('.kr-input').forEach(input => {
+    input.addEventListener('change', (e) => {
+      const key = e.target.dataset.key;
+      state.annual[key].current = parseFloat(e.target.value) || 0;
+      saveState();
+      renderAnnualKRs();
+      showToast('Updated');
+    });
+  });
+}
+
+function formatNum(n) {
+  if (n >= 1000) return n.toLocaleString();
+  return n;
+}
+
+// ============== WEEKLY LOG ==============
+function logWeek() {
+  const week = {
+    date: new Date().toISOString().slice(0, 10),
+    weekNum: getWeekNum(),
+    hours: parseFloat(document.getElementById('in-hours').value) || 0,
+    pitched: parseInt(document.getElementById('in-pitched').value) || 0,
+    closed: parseInt(document.getElementById('in-closed').value) || 0,
+    revenue: parseFloat(document.getElementById('in-revenue').value) || 0,
+    shows: parseInt(document.getElementById('in-shows').value) || 0,
+    content: parseInt(document.getElementById('in-content').value) || 0,
+    notes: document.getElementById('week-notes').value || ''
+  };
+
+  state.weekHistory.unshift(week);
+
+  // Auto-update annual KRs from week data
+  state.annual.revenue.current += week.revenue;
+  state.annual.advertisers.current += week.closed;
+  if (week.shows > state.annual.shows.current) {
+    state.annual.shows.current = week.shows;
+  }
+
+  saveState();
+  renderAnnualKRs();
+  renderHistory();
+  clearForm();
+  showToast('Week logged');
+}
+
+function clearForm() {
+  ['in-hours','in-pitched','in-closed','in-revenue','in-shows','in-content'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('week-notes').value = '';
+}
+
+function getWeekNum() {
+  const d = new Date();
+  const start = new Date(d.getFullYear(), 0, 1);
+  const days = Math.floor((d - start) / (24 * 60 * 60 * 1000));
+  return Math.ceil((days + start.getDay() + 1) / 7);
+}
+
+// ============== HISTORY ==============
+function renderHistory() {
+  const container = document.getElementById('history-list');
+  container.innerHTML = '';
+  if (state.weekHistory.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--ink-faint);font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.15em">NO WEEKS LOGGED YET</div>';
+    return;
+  }
+  state.weekHistory.forEach(w => {
+    const el = document.createElement('div');
+    el.className = 'history-week';
+    el.innerHTML = `
+      <div class="history-date">WK ${w.weekNum}<br><span style="color:var(--ink-faint);font-size:9px">${w.date}</span></div>
+      <div class="history-stats">
+        <span><strong>${w.hours}h</strong>hrs</span>
+        <span><strong>${w.pitched}</strong>pitched</span>
+        <span><strong>${w.closed}</strong>closed</span>
+        <span><strong>$${formatNum(w.revenue)}</strong>booked</span>
+        <span><strong>${w.shows}</strong>shows</span>
+      </div>
+    `;
+    container.appendChild(el);
+  });
+}
+
+// ============== EXPORT / RESET ==============
+function exportData() {
+  const dataStr = JSON.stringify(state, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `podspot-data-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported');
+}
+
+function confirmReset() {
+  if (confirm('Reset all data? This cannot be undone. Export first if you want a backup.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    state = JSON.parse(JSON.stringify(defaultState));
+    saveState();
+    renderAnnualKRs();
+    renderHistory();
+    document.getElementById('long-notes').value = '';
+    showToast('Reset');
+  }
+}
+
+// ============== NOTES ==============
+let notesTimer;
+document.getElementById('long-notes').addEventListener('input', (e) => {
+  state.longNotes = e.target.value;
+  clearTimeout(notesTimer);
+  notesTimer = setTimeout(() => {
+    saveState();
+    document.getElementById('notes-saved').textContent = 'Saved · ' + new Date().toLocaleTimeString();
+  }, 500);
+});
+
+// ============== HEADER DATE ==============
+function updateDate() {
+  const d = new Date();
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('today-date').textContent = `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+  document.getElementById('week-num').textContent = `Week ${getWeekNum()}`;
+}
+
+// ============== INIT ==============
+renderAnnualKRs();
+renderHistory();
+updateDate();
+document.getElementById('long-notes').value = state.longNotes || '';
+</script>
+</body>
+</html>
